@@ -298,6 +298,9 @@ inline bool serial_data_available() {
     #if NUM_SERIAL > 1
       || MYSERIAL1.available()
     #endif
+    #if NUM_SERIAL > 2
+      || MYSERIAL2.available()
+    #endif
   ;
 }
 
@@ -306,6 +309,9 @@ inline int read_serial(const uint8_t index) {
     case 0: return MYSERIAL0.read();
     #if NUM_SERIAL > 1
       case 1: return MYSERIAL1.read();
+    #endif
+    #if NUM_SERIAL > 2
+      case 2: return MYSERIAL2.read();
     #endif
     default: return -1;
   }

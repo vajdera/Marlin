@@ -103,10 +103,25 @@ typedef int8_t pin_t;
       #error "SERIAL_PORT_2 must be different than SERIAL_PORT. Please update your configuration."
     #endif
     #define MYSERIAL1 customizedSerial2
+  #endif
+  
+  #ifdef SERIAL_PORT_3
+    #if !WITHIN(SERIAL_PORT_3, -1, 3)
+      #error "SERIAL_PORT_3 must be from -1 to 3"
+    #elif SERIAL_PORT_3 == SERIAL_PORT
+      #error "SERIAL_PORT_3 must be different than SERIAL_PORT"
+    #endif
+    #define MYSERIAL2 customizedSerial3
+  #endif
+
+  #if defined(SERIAL_PORT_3)
+    #define NUM_SERIAL 3
+  #elif defined(SERIAL_PORT_2)
     #define NUM_SERIAL 2
   #else
     #define NUM_SERIAL 1
   #endif
+
 #endif
 
 #ifdef DGUS_SERIAL_PORT

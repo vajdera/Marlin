@@ -46,21 +46,36 @@ enum MarlinDebugFlags : uint8_t {
 extern uint8_t marlin_debug_flags;
 #define DEBUGGING(F) (marlin_debug_flags & (MARLIN_DEBUG_## F))
 
-#define SERIAL_BOTH 0x7F
-#if NUM_SERIAL > 1
-  extern int8_t serial_port_index;
-  #define _PORT_REDIRECT(n,p)   REMEMBER(n,serial_port_index,p)
-  #define _PORT_RESTORE(n)      RESTORE(n)
-  #define SERIAL_OUT(WHAT, V...) do{ \
-    if (!serial_port_index || serial_port_index == SERIAL_BOTH) (void)MYSERIAL0.WHAT(V); \
-    if ( serial_port_index) (void)MYSERIAL1.WHAT(V); \
-  }while(0)
-  #define SERIAL_ASSERT(P)      if(serial_port_index!=(P)){ debugger(); }
-#else
+#define SERIAL_ALL 0x7F
+
+#if NUM_SERIAL == 1
   #define _PORT_REDIRECT(n,p)   NOOP
   #define _PORT_RESTORE(n)      NOOP
   #define SERIAL_OUT(WHAT, V...) (void)MYSERIAL0.WHAT(V)
   #define SERIAL_ASSERT(P)      NOOP
+#endif
+
+#if NUM_SERIAL == 2
+  extern int8_t serial_port_index;
+  #define _PORT_REDIRECT(n,p)   REMEMBER(n,serial_port_index,p)
+  #define _PORT_RESTORE(n)      RESTORE(n)
+  #define SERIAL_OUT(WHAT, V...) do{ \
+    if ( serial_port_index == 0 || serial_port_index == SERIAL_ALL) (void)MYSERIAL0.WHAT(V); \
+    if ( serial_port_index == 1 || serial_port_index == SERIAL_ALL) (void)MYSERIAL1.WHAT(V); \
+  }while(0)
+  #define SERIAL_ASSERT(P)      if(serial_port_index!=(P)){ debugger(); }
+#endif
+
+#if NUM_SERIAL == 3
+  extern int8_t serial_port_index;
+  #define _PORT_REDIRECT(n,p)   REMEMBER(n,serial_port_index,p)
+  #define _PORT_RESTORE(n)      RESTORE(n)
+  #define SERIAL_OUT(WHAT, V...) do{ \
+    if ( serial_port_index == 0 || serial_port_index == SERIAL_ALL) (void)MYSERIAL0.WHAT(V); \
+    if ( serial_port_index == 1 || serial_port_index == SERIAL_ALL) (void)MYSERIAL1.WHAT(V); \
+    if ( serial_port_index == 2 || serial_port_index == SERIAL_ALL) (void)MYSERIAL2.WHAT(V); \
+  }while(0)
+  #define SERIAL_ASSERT(P)      if(serial_port_index!=(P)){ debugger(); }
 #endif
 
 #define PORT_REDIRECT(p)        _PORT_REDIRECT(1,p)

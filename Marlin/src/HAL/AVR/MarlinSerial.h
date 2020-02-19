@@ -276,6 +276,12 @@
 
   #endif
 
+  #ifdef SERIAL_PORT_3
+
+    extern MarlinSerial<MarlinSerialCfg<SERIAL_PORT_3>> customizedSerial3;
+
+  #endif
+
 #endif // !USBCON
 
 #ifdef INTERNAL_SERIAL_PORT

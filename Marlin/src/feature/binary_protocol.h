@@ -35,6 +35,9 @@ inline bool bs_serial_data_available(const uint8_t index) {
     #if NUM_SERIAL > 1
       case 1: return MYSERIAL1.available();
     #endif
+    #if NUM_SERIAL > 2
+      case 2: return MYSERIAL2.available();
+    #endif
   }
   return false;
 }
@@ -44,6 +47,9 @@ inline int bs_read_serial(const uint8_t index) {
     case 0: return MYSERIAL0.read();
     #if NUM_SERIAL > 1
       case 1: return MYSERIAL1.read();
+    #endif
+    #if NUM_SERIAL > 2
+      case 2: return MYSERIAL2.read();
     #endif
   }
   return -1;

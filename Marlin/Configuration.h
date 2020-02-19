@@ -111,6 +111,7 @@
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
 //#define SERIAL_PORT_2 -1
+//#define SERIAL_PORT_3 -1
 
 /**
  * This setting determines the communication speed of the printer.
